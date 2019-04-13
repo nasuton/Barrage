@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System">
+      <UniqueIdentifier>{9a6fe825-0b96-4c04-9274-ee8fb7348fee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System\Collision">
+      <UniqueIdentifier>{a5b576a0-77a4-40ad-96fe-aef5a0e451c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System\LayerBase">
+      <UniqueIdentifier>{36bda993-2e6e-4b94-a0c6-18bd94626108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System\SceneBase">
+      <UniqueIdentifier>{fd87466d-453e-4a38-ad45-363b0644827b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System\SceneManager">
+      <UniqueIdentifier>{e1cad375-44ac-4f3a-bcad-cb3f75bb608b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\Collision\CollisionUtils.cpp">
+      <Filter>src\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\Collision\CollisionComponent.cpp">
+      <Filter>src\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\Collision\CollisionDetaction.cpp">
+      <Filter>src\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\LayerBase\LayerBase.cpp">
+      <Filter>src\System\LayerBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\SceneManager\SceneManager.cpp">
+      <Filter>src\System\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\SceneBase\SceneBase.cpp">
+      <Filter>src\System\SceneBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SampleLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SampleScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\Collision\collision_point.h">
+      <Filter>src\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\Collision\CollisionComponent.h">
+      <Filter>src\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\Collision\CollisionDetaction.h">
+      <Filter>src\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\Collision\CollisionUtils.h">
+      <Filter>src\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\LayerBase\LayerBase.h">
+      <Filter>src\System\LayerBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\SceneManager\SceneManager.h">
+      <Filter>src\System\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\SceneBase\SceneBase.h">
+      <Filter>src\System\SceneBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SampleLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SampleScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
