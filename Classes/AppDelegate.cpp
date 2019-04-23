@@ -123,7 +123,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // run
     //director->runWithScene(scene);
-	director->runWithScene(SceneManager::CreateSampleScene());
+	director->runWithScene(SceneManager::CreateSampleMenuScene());
 
     return true;
 }

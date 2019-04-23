@@ -25,6 +25,9 @@
     <Filter Include="src\System\SceneManager">
       <UniqueIdentifier>{e1cad375-44ac-4f3a-bcad-cb3f75bb608b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sample">
+      <UniqueIdentifier>{f7ffff86-df24-4bac-b395-f3cba6b79955}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,11 +57,17 @@
     <ClCompile Include="..\Classes\System\SceneBase\SceneBase.cpp">
       <Filter>src\System\SceneBase</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\SampleLayer.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Sample\SampleLayer.cpp">
+      <Filter>src\Sample</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\SampleScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Sample\SampleMenuLayer.cpp">
+      <Filter>src\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Sample\SampleMenuScene.cpp">
+      <Filter>src\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Sample\SampleScene.cpp">
+      <Filter>src\Sample</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,11 +101,17 @@
     <ClInclude Include="..\Classes\System\SceneBase\SceneBase.h">
       <Filter>src\System\SceneBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\SampleLayer.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Sample\SampleLayer.h">
+      <Filter>src\Sample</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\SampleScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Sample\SampleMenuLayer.h">
+      <Filter>src\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Sample\SampleMenuScene.h">
+      <Filter>src\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Sample\SampleScene.h">
+      <Filter>src\Sample</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ public:
 	SampleScene();
 	virtual ~SampleScene();
 
-	static cocos2d::Scene* sceneCreate();
+	static cocos2d::Scene* sceneCreate(int _num, bool _use, int _scale);
 };
 
 #endif

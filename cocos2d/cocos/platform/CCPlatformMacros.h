@@ -187,7 +187,7 @@ protected: varType varName; public: virtual inline varType get##funName(void) co
 #define CC_SYNTHESIZE_PASS_BY_REF(varType, varName, funName)\
 protected: varType varName; public: virtual inline const varType& get##funName(void) const { return varName; } virtual inline void set##funName(const varType& var){ varName = var; }
 
-#define CC_SYNTHESIZE_RETAIN(varType, varName, funName)    \
+#define CC_SYNTHESIZE_RETAIN(varType, varName, funName)\
 private: varType varName; public: virtual inline varType get##funName(void) const { return varName; } virtual inline void set##funName(varType var) \
 { \
     if (varName != var) \
