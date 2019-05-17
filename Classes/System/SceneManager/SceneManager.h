@@ -9,9 +9,7 @@ public:
 	virtual ~SceneManager();
 
 	//ここにシーンを追加していく
-	static cocos2d::Scene* CreateSampleScene(int _num, bool _usefortree, int _winSize);
-
-	static cocos2d::Scene* CreateSampleMenuScene();
+	
 
 private:
 	template <class Scene>

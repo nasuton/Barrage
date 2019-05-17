@@ -1,243 +1,258 @@
-﻿#include "Sample/SampleLayer.h"
+﻿#include "SampleLayer.h"
+#include "SampleMainLayer.h"
 #include "System/Collision/CollisionComponent.h"
 #include "System/Collision/CollisionUtils.h"
-#include "System/SceneManager/SceneManager.h"
 
 USING_NS_CC;
+//文字化けを防ぐおまじない
+#pragma execution_character_set("utf-8")
 
-SampleLayer::SampleLayer() 
-:m_max(0)
-,num(100)
-,use(false)
-,scale(1)
-,scroll(nullptr)
-,node(nullptr)
-,detection(nullptr)
-,label(nullptr)
-,other(nullptr)
-,touchListener(nullptr){
-	touchListener = EventListenerTouchOneByOne::create();
-	touchListener->onTouchBegan = CC_CALLBACK_2(SampleLayer::onTouchBegan, this);
-	touchListener->onTouchMoved = CC_CALLBACK_2(SampleLayer::onTouchMoved, this);
-	touchListener->onTouchEnded = CC_CALLBACK_2(SampleLayer::onTouchEnded, this);
-	touchListener->onTouchCancelled = CC_CALLBACK_2(SampleLayer::onTouchCancelled, this);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
+Scene *SampleLayer::createScene(int num, bool use, int scale) {
+    auto scene = Scene::create();
+    auto layer = SampleLayer::create(num, use, scale);
+    scene->addChild(layer);
+    scene->addChild(layer->getLayer());
+    return scene;
 }
 
-SampleLayer::~SampleLayer() {
-	Director::getInstance()->getEventDispatcher()->removeEventListener(touchListener);
-	CC_SAFE_RELEASE_NULL(scroll);
-	CC_SAFE_RELEASE_NULL(node);
-	CC_SAFE_RELEASE_NULL(other);
-	CC_SAFE_RELEASE_NULL(label);
-	CC_SAFE_RELEASE_NULL(touchListener);
+SampleLayer *SampleLayer::create(int num, bool use, int scale) {
+    auto ref = new SampleLayer();
+    if (ref && ref->init(num, use, scale)) {
+        ref->autorelease();
+        return ref;
+    }
+    CC_SAFE_DELETE(ref);
+    return nullptr;
 }
 
-SampleLayer* SampleLayer::create(int _num, bool _use, int _scale) {
-	auto ret = new SampleLayer();
+bool SampleLayer::init(int num, bool use, int scale) {
+    if (!LayerColor::initWithColor(Color4B::WHITE)) {
+        return false;
+    }
 
-	if (ret && ret->init(_num, _use, _scale)) {
-		ret->autorelease();
+    m_num = num;
+    m_use = use;
+    m_scale = scale;
 
-		return ret;
-	}
-	else {
-		CC_SAFE_RELEASE_NULL(ret);
-	}
+    srand((unsigned int)time(nullptr));
+    auto win = Director::getInstance()->getVisibleSize();
+    auto origin = Director::getInstance()->getVisibleOrigin();
 
-	return nullptr;
+    auto scroll = cocos2d::extension::ScrollView::create(win);
+    scroll->setMaxScale(2.0);
+    scroll->setMinScale(0.5);
+
+    m_other = Layer::create();
+    m_other->retain();
+    m_label = Label::createWithSystemFont("test", "Arial", 40);
+    m_label->setColor(Color3B::BLUE);
+    m_label->setPosition(win.width / 2, win.height - 50);
+    m_label->retain();
+    m_other->addChild(m_label);
+
+    auto menuItem = generateButton("Back", [](Ref *ref) {
+        auto scene = SampleMainLayer::createScene();
+        Director::getInstance()->replaceScene(scene);
+    });
+    auto menu = Menu::createWithItem(menuItem);
+    menu->setContentSize(menuItem->getContentSize());
+    menu->setAnchorPoint(Point::ANCHOR_MIDDLE);
+    menu->setPosition(win.width - menu->getContentSize().width / 2,
+                      win.height - 50);
+    m_other->addChild(menu);
+
+    win = win * m_scale;
+    scroll->setContentSize(win);
+    scroll->setTouchEnabled(true);
+    scroll->setPosition(Point::ZERO);
+    scroll->setAnchorPoint(Point::ZERO);
+    addChild(scroll);
+
+    m_node = SpriteBatchNode::create("sample/sprite.png");
+    m_node->retain();
+    m_node->setContentSize(win);
+    scroll->setContainer(m_node);
+    m_scroll = scroll;
+    m_scroll->retain();
+
+    auto call1 = CC_CALLBACK_2(SampleLayer::detectCollision, this);
+    m_detection = CollisionDetaction::getDefaultDetaction();
+    m_detection->init(m_node, 4, true, call1);
+
+    {
+        auto sprite = Sprite::create("sample/sprite.png");
+        sprite->setPosition(win.width / 2 + origin.x,
+                            win.height / 2 + origin.y);
+        sprite->addComponent(CollisionComponent::create(2));
+        // m_detection->add(sprite);
+        m_node->addChild(sprite);
+    }
+    for (int i = 0; i < m_num; i++) {
+        auto sprite = Sprite::create("sample/sprite.png");
+        auto pos = Point(
+            win.width / 2 + CCRANDOM_MINUS1_1() * win.width / 2 + origin.x,
+            win.height / 2 + CCRANDOM_MINUS1_1() * win.height / 2 + origin.y);
+        sprite->setScaleX(CCRANDOM_0_1() * 0.3 + 0.1);
+        sprite->setScaleY(CCRANDOM_0_1() + 0.1);
+        sprite->setPosition(pos);
+        sprite->setRotation(CCRANDOM_MINUS1_1() * 360.0);
+        auto in = rand() % 2 + 1;
+        sprite->addComponent(CollisionComponent::create(in));
+        // m_detection->add(sprite);
+        m_node->addChild(sprite);
+    }
+    {
+        auto sprite = Sprite::create("sample/sprite.png");
+        sprite->setPosition(win.width / 4 + origin.x,
+                            win.height / 4 + origin.y);
+        sprite->setRotation(90);
+        auto rotate = RotateBy::create(1.0, 45);
+        auto repeat = RepeatForever::create(rotate);
+        // m_detection->add(sprite);
+        sprite->addComponent(CollisionComponent::create(2));
+        m_node->addChild(sprite);
+        sprite->runAction(repeat);
+    }
+    auto began = CC_CALLBACK_2(SampleLayer::touchBegan, this);
+    auto move = CC_CALLBACK_2(SampleLayer::touchMoved, this);
+    auto end = CC_CALLBACK_2(SampleLayer::touchEnded, this);
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = began;
+    listener->onTouchMoved = move;
+    listener->onTouchEnded = end;
+    listener->setSwallowTouches(true);
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,
+                                                                 this);
+    this->scheduleUpdate();
+
+    this->schedule(
+        [this](float f) {
+            auto time = Director::getInstance()->getSecondsPerFrame();
+            auto str =
+                StringUtils::format("衝突判定:%fs\n全体:%fs", m_max, time);
+            m_label->setString(str);
+        },
+        0.1, "display");
+    return true;
 }
 
-void SampleLayer::DetectCollision(CollisionNode * collisionObject1,
-	                              CollisionNode * collisionObject2) {
-	auto node1 = collisionObject1->getNode();
-	auto node2 = collisionObject2->getNode();
-
-	if (CollisionUtils::intersectRect(node1, node2) == false) {
-		return;
-	}
-
-	node1->setColor(Color3B::RED);
-	node2->setColor(Color3B::RED);
+bool SampleLayer::touchBegan(cocos2d::Touch *touch, cocos2d::Event *event) {
+    auto pos = m_node->convertToNodeSpace(touch->getLocation());
+    for (auto node : m_node->getChildren()) {
+        if (CollisionUtils::containsPoint(node, pos, Size::ZERO)) {
+            node->retain();
+            setUserData(node);
+            m_scroll->setTouchEnabled(false);
+            return true;
+        }
+    }
+    return true;
 }
 
-bool SampleLayer::init(int _num, bool _use, int _scale) {
-	if (!Layer::init()) {
-		return false;
-	}
+void SampleLayer::touchMoved(cocos2d::Touch *touch, cocos2d::Event *event) {
+    auto pos = m_node->convertToNodeSpace(touch->getLocation());
+    if (auto node = (Node *)(getUserData())) {
+        if (node->getParent() == nullptr) {
+            node->release();
+            setUserData(nullptr);
+            return;
+        }
+        node->setPosition(pos);
 
-	num = _num;
-	use = _use;
-	scale = _scale;
-	srand((unsigned int)time(nullptr));
-	auto win = Director::getInstance()->getVisibleSize();
-	auto origin = Director::getInstance()->getVisibleOrigin();
-
-	auto m_scroll = cocos2d::extension::ScrollView::create(win);
-	m_scroll->setMaxScale(2.0f);
-	m_scroll->setMinScale(0.5f);
-
-	other = Layer::create();
-	other->retain();
-	label = Label::createWithSystemFont("test", "Arial", 40.0f);
-	label->setColor(Color3B::BLUE);
-	label->setPosition(win.width * 0.5f, win.height - 50.0f);
-	label->retain();
-	other->addChild(label);
-
-	auto menuItem = generateButton("Back", [](Ref* _ref) {
-		auto scene = SceneManager::CreateSampleMenuScene();
-		Director::getInstance()->replaceScene(scene);
-	});
-
-	auto menu = Menu::createWithItem(menuItem);
-	menu->setContentSize(menuItem->getContentSize());
-	menu->setAnchorPoint(Point::ANCHOR_MIDDLE);
-	menu->setPosition(win.width - menu->getContentSize().width * 0.5f,
-		              win.height - 50.0f);
-	other->addChild(menu);
-
-	win = win * scale;
-	m_scroll->setContentSize(win);
-	m_scroll->setTouchEnabled(true);
-	m_scroll->setPosition(Point::ZERO);
-	m_scroll->setAnchorPoint(Point::ZERO);
-	this->addChild(m_scroll);
-
-	node = SpriteBatchNode::create("sample/sprite.png");
-	node->retain();
-	node->setContentSize(win);
-	m_scroll->setContainer(node);
-	scroll = m_scroll;
-	scroll->retain();
-
-	auto call1 = CC_CALLBACK_2(SampleLayer::DetectCollision, this);
-	detection = CollisionDetaction::getDefaultDetaction();
-	detection->init(node, 4, true, call1);
-
-	auto sprite = Sprite::create("sample/sprite.png");
-	sprite->setPosition(win.width * 0.5f + origin.x,
-		                win.height * 0.5f + origin.y);
-	sprite->addComponent(CollisionComponent::create(2));
-	node->addChild(sprite);
-
-	for (int i = 0; i < num; i++) {
-		auto sprite = Sprite::create("sample/sprite.png");
-		auto pos = Point(
-			win.width * 0.5f + CCRANDOM_MINUS1_1() * win.width * 0.5f + origin.x,
-			win.height * 0.5f + CCRANDOM_MINUS1_1() * win.height * 0.5f + origin.y);
-		sprite->setScaleX(CCRANDOM_0_1() * 0.3f + 0.1f);
-		sprite->setScaleY(CCRANDOM_0_1() + 0.1f);
-		sprite->setPosition(pos);
-		sprite->setRotation(CCRANDOM_MINUS1_1() * 360.0f);
-		auto in = rand() % 2 + 1;
-		sprite->addComponent(CollisionComponent::create(in));
-		node->addChild(sprite);
-	}
-
-	auto _sprite = Sprite::create("sample/sprite.png");
-	_sprite->setPosition(win.width / 4.0f + origin.x,
-		                 win.height / 4.0f + origin.y);
-	_sprite->setRotation(90.0f);
-	auto rotate = RotateBy::create(1.0f, 45.0f);
-	auto repeat = RepeatForever::create(rotate);
-	_sprite->addComponent(CollisionComponent::create(2));
-	node->addChild(_sprite);
-	_sprite->runAction(repeat);
-
-	this->schedule(
-		[this](float f) {
-		auto time = Director::getInstance()->getSecondsPerFrame();
-		auto str = StringUtils::format("衝突判定:%fs\n全体:%fs", m_max, time);
-		label->setString(str);
-	},
-	0.1f, "display");
-
-	return true;
+        return;
+    }
 }
 
-void SampleLayer::update(float dt) {
-	Layer::update(dt);
-	for (auto n : node->getChildren()) {
-		n->setColor(Color3B::WHITE);
-	}
-
-	double time = utils::gettime();
-	if (use) {
-		detection->update();
-	}
-	else {
-		auto nodes = node->getChildren();
-		auto size = nodes.size();
-		for (int i = 0; i < size; i++) {
-			auto node1 = nodes.at(i);
-			for (int k = i + 1; k < size; k++) {
-				auto node2 = nodes.at(k);
-				if (CollisionUtils::intersectRect(node1, node2)) {
-					node1->setColor(Color3B::RED);
-					node2->setColor(Color3B::RED);
-				}
-			}
-		}
-	}
-	time = utils::gettime() - time;
-	m_max = time;
+void SampleLayer::touchEnded(cocos2d::Touch *touch, cocos2d::Event *event) {
+    if (auto node = (Node *)(getUserData())) {
+        node->release();
+        setUserData(nullptr);
+    }
+    m_scroll->setTouchEnabled(true);
+    /*
+    auto pos = touch->getLocation();
+    for (auto node : m_node->getChildren()) {
+        node->setColor(Color3B::WHITE);
+    }*/
 }
 
-bool SampleLayer::onTouchBegan(cocos2d::Touch* _touch, cocos2d::Event* _event) {
-	auto pos = node->convertToNodeSpace(_touch->getLocation());
-	for (auto _node : node->getChildren()) {
-		if (CollisionUtils::containsPoint(_node, pos, Size::ZERO)) {
-			_node->retain();
-			setUserData(_node);
-			scroll->setTouchEnabled(false);
-			return true;
-		}
-	}
-	return true;
+void SampleLayer::update(float f) {
+    LayerColor::update(f);
+    for (auto n : m_node->getChildren()) {
+        n->setColor(Color3B::WHITE);
+    }
+
+    double time = utils::gettime();
+    if (m_use) {
+        m_detection->update();
+    } else {
+        auto nodes = m_node->getChildren();
+        auto size = nodes.size();
+        for (int i = 0; i < size; i++) {
+            auto node1 = nodes.at(i);
+            for (int j = i + 1; j < size; j++) {
+                auto node2 = nodes.at(j);
+                if (CollisionUtils::intersectRect(node1, node2)) {
+                    node1->setColor(Color3B::RED);
+                    node2->setColor(Color3B::RED);
+                }
+            }
+        }
+        /*
+        for (auto node : m_node->getChildren()) {
+            for (auto other : m_node->getChildren()) {
+                if (node == other) {
+                    continue;
+                }
+                if (CollisionUtils::intersectRect(node, other)) {
+                    other->setColor(Color3B::RED);
+                }
+            }
+        }*/
+    }
+    time = utils::gettime() - time;
+    m_max = time;
 }
 
-void SampleLayer::onTouchMoved(cocos2d::Touch* _touch, cocos2d::Event* _event) {
-	auto pos = node->convertToNodeSpace(_touch->getLocation());
-	if (auto _node = (Node*)(getUserData())) {
-		if (_node->getParent() == nullptr) {
-			_node->release();
-			setUserData(nullptr);
-			return;
-		}
-		_node->setPosition(pos);
-		return;
-	}
+void SampleLayer::detectCollision(CollisionNode *collisionObject1,
+                                  CollisionNode *collisionObject2) {
+    auto node1 = collisionObject1->getNode();
+    auto node2 = collisionObject2->getNode();
+    if (CollisionUtils::intersectRect(node1, node2) == false) {
+        return;
+    }
+    node1->setColor(Color3B::RED);
+    node2->setColor(Color3B::RED);
+
+    /*
+    if (collisionObject2->isSameGroup(collisionObject1)) {
+        return;
+    }
+    if (collisionObject1->bitmask(1)) {
+        node1->removeFromParent();
+    }
+    if (collisionObject2->bitmask(1)) {
+        node2->removeFromParent();
+    }*/
+    // m_detection->remove(collisionObject2);
+    // collisionObject2->setColor(Color3B::BLUE);
 }
 
-void SampleLayer::onTouchEnded(cocos2d::Touch* _touch, cocos2d::Event* _event) {
-	if (auto _node = (Node*)(getUserData())) {
-		_node->release();
-		setUserData(nullptr);
-	}
-	scroll->setTouchEnabled(true);
-}
-
-void SampleLayer::onTouchCancelled(cocos2d::Touch* _touch, cocos2d::Event* _event) {
-	return;
-}
-
-cocos2d::MenuItemSprite * SampleLayer::generateButton(const std::string& _caption, 
-	                                                  const cocos2d::ccMenuCallback& _callback) {
-	auto generate = [this](const std::string& _cap) {
-		auto spr = Sprite::create("sample/button.png");
-		auto size = spr->getContentSize();
-		auto text = Label::createWithSystemFont(_cap, "Arial", 30.0f);
-		text->setPosition(Point(size.width * 0.5f, size.height * 0.5f));
-		text->setColor(Color3B::BLACK);
-		spr->addChild(text);
-		return spr;
-	};
-	auto on = generate(_caption);
-	auto select = generate(_caption);
-	auto disable = generate(_caption);
-	select->setColor(Color3B(200, 230, 230));
-	disable->setColor(Color3B::GRAY);
-
-	return MenuItemSprite::create(on, select, disable, _callback);
+MenuItemSprite *SampleLayer::generateButton(
+    const std::string &caption, const cocos2d::ccMenuCallback &callback) {
+    auto generate = [this](const std::string &cap) {
+        auto spr = Sprite::create("sample/button.png");
+        auto size = spr->getContentSize();
+        auto text = Label::createWithSystemFont(cap, "Arial", 30);
+        text->setPosition(Point(size.width / 2, size.height / 2));
+        text->setColor(Color3B::BLACK);
+        spr->addChild(text);
+        return spr;
+    };
+    auto on = generate(caption);
+    auto select = generate(caption);
+    auto disable = generate(caption);
+    select->setColor(Color3B(200, 230, 230));
+    disable->setColor(Color3B::GRAY);
+    return MenuItemSprite::create(on, select, disable, callback);
 }

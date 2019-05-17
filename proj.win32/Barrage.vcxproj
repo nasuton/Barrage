@@ -149,11 +149,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\Sample\SampleLayer.cpp" />
-    <ClCompile Include="..\Classes\Sample\SampleMenuLayer.cpp" />
-    <ClCompile Include="..\Classes\Sample\SampleMenuScene.cpp" />
-    <ClCompile Include="..\Classes\Sample\SampleScene.cpp" />
+    <ClCompile Include="..\Classes\Sample\SampleMainLayer.cpp" />
+    <ClCompile Include="..\Classes\Ship\MyShip.cpp" />
     <ClCompile Include="..\Classes\System\Collision\CollisionComponent.cpp" />
     <ClCompile Include="..\Classes\System\Collision\CollisionDetaction.cpp" />
     <ClCompile Include="..\Classes\System\Collision\CollisionUtils.cpp" />
@@ -164,11 +162,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\Sample\SampleLayer.h" />
-    <ClInclude Include="..\Classes\Sample\SampleMenuLayer.h" />
-    <ClInclude Include="..\Classes\Sample\SampleMenuScene.h" />
-    <ClInclude Include="..\Classes\Sample\SampleScene.h" />
+    <ClInclude Include="..\Classes\Sample\SampleMainLayer.h" />
+    <ClInclude Include="..\Classes\Ship\MyShip.h" />
     <ClInclude Include="..\Classes\System\Collision\CollisionComponent.h" />
     <ClInclude Include="..\Classes\System\Collision\CollisionDetaction.h" />
     <ClInclude Include="..\Classes\System\Collision\CollisionUtils.h" />

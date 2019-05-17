@@ -28,15 +28,15 @@
     <Filter Include="src\Sample">
       <UniqueIdentifier>{f7ffff86-df24-4bac-b395-f3cba6b79955}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Ship">
+      <UniqueIdentifier>{749bbe11-8f51-43b0-bb50-594e57fd503c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\System\Collision\CollisionUtils.cpp">
@@ -57,16 +57,13 @@
     <ClCompile Include="..\Classes\System\SceneBase\SceneBase.cpp">
       <Filter>src\System\SceneBase</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Ship\MyShip.cpp">
+      <Filter>src\Ship</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\Sample\SampleLayer.cpp">
       <Filter>src\Sample</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Sample\SampleMenuLayer.cpp">
-      <Filter>src\Sample</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Sample\SampleMenuScene.cpp">
-      <Filter>src\Sample</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Sample\SampleScene.cpp">
+    <ClCompile Include="..\Classes\Sample\SampleMainLayer.cpp">
       <Filter>src\Sample</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,9 +72,6 @@
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\System\Collision\collision_point.h">
@@ -101,16 +95,13 @@
     <ClInclude Include="..\Classes\System\SceneBase\SceneBase.h">
       <Filter>src\System\SceneBase</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Ship\MyShip.h">
+      <Filter>src\Ship</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\Sample\SampleLayer.h">
       <Filter>src\Sample</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Sample\SampleMenuLayer.h">
-      <Filter>src\Sample</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Sample\SampleMenuScene.h">
-      <Filter>src\Sample</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Sample\SampleScene.h">
+    <ClInclude Include="..\Classes\Sample\SampleMainLayer.h">
       <Filter>src\Sample</Filter>
     </ClInclude>
   </ItemGroup>
