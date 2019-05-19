@@ -1,4 +1,8 @@
-﻿#include "SampleLayer.h"
+﻿/*
+* 四分木のサンプルシーン
+*/
+
+#include "SampleLayer.h"
 #include "SampleMainLayer.h"
 #include "System/Collision/CollisionComponent.h"
 #include "System/Collision/CollisionUtils.h"
