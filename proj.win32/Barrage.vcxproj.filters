@@ -31,6 +31,9 @@
     <Filter Include="src\Ship">
       <UniqueIdentifier>{749bbe11-8f51-43b0-bb50-594e57fd503c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\GameMain">
+      <UniqueIdentifier>{f2a96ca0-583b-4d8a-9164-39e7c67a620a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Sample\SampleMainLayer.cpp">
       <Filter>src\Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameMain\GameMainLayer.cpp">
+      <Filter>src\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameMain\GameMainScene.cpp">
+      <Filter>src\GameMain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +112,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Sample\SampleMainLayer.h">
       <Filter>src\Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameMain\GameMainLayer.h">
+      <Filter>src\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameMain\GameMainScene.h">
+      <Filter>src\GameMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
