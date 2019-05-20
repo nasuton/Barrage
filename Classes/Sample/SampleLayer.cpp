@@ -12,15 +12,15 @@ USING_NS_CC;
 #pragma execution_character_set("utf-8")
 
 Scene *SampleLayer::createScene(int num, bool use, int scale) {
-    auto scene = Scene::create();
-    auto layer = SampleLayer::create(num, use, scale);
+    Scene* scene = Scene::create();
+    SampleLayer* layer = SampleLayer::create(num, use, scale);
     scene->addChild(layer);
     scene->addChild(layer->getLayer());
     return scene;
 }
 
 SampleLayer *SampleLayer::create(int num, bool use, int scale) {
-    auto ref = new SampleLayer();
+	SampleLayer* ref = new SampleLayer();
     if (ref && ref->init(num, use, scale)) {
         ref->autorelease();
         return ref;
@@ -39,8 +39,8 @@ bool SampleLayer::init(int num, bool use, int scale) {
     m_scale = scale;
 
     srand((unsigned int)time(nullptr));
-    auto win = Director::getInstance()->getVisibleSize();
-    auto origin = Director::getInstance()->getVisibleOrigin();
+    Size win = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     auto scroll = cocos2d::extension::ScrollView::create(win);
     scroll->setMaxScale(2.0);
@@ -84,7 +84,7 @@ bool SampleLayer::init(int num, bool use, int scale) {
     m_detection->init(m_node, 4, true, call1);
 
     {
-        auto sprite = Sprite::create("sample/sprite.png");
+        Sprite* sprite = Sprite::create("sample/sprite.png");
         sprite->setPosition(win.width / 2 + origin.x,
                             win.height / 2 + origin.y);
         sprite->addComponent(CollisionComponent::create(2));
@@ -92,26 +92,26 @@ bool SampleLayer::init(int num, bool use, int scale) {
         m_node->addChild(sprite);
     }
     for (int i = 0; i < m_num; i++) {
-        auto sprite = Sprite::create("sample/sprite.png");
-        auto pos = Point(
+        Sprite* sprite = Sprite::create("sample/sprite.png");
+        Point pos = Point(
             win.width / 2 + CCRANDOM_MINUS1_1() * win.width / 2 + origin.x,
             win.height / 2 + CCRANDOM_MINUS1_1() * win.height / 2 + origin.y);
         sprite->setScaleX(CCRANDOM_0_1() * 0.3 + 0.1);
         sprite->setScaleY(CCRANDOM_0_1() + 0.1);
         sprite->setPosition(pos);
         sprite->setRotation(CCRANDOM_MINUS1_1() * 360.0);
-        auto in = rand() % 2 + 1;
+        int in = rand() % 2 + 1;
         sprite->addComponent(CollisionComponent::create(in));
         // m_detection->add(sprite);
         m_node->addChild(sprite);
     }
     {
-        auto sprite = Sprite::create("sample/sprite.png");
+        Sprite* sprite = Sprite::create("sample/sprite.png");
         sprite->setPosition(win.width / 4 + origin.x,
                             win.height / 4 + origin.y);
         sprite->setRotation(90);
-        auto rotate = RotateBy::create(1.0, 45);
-        auto repeat = RepeatForever::create(rotate);
+		RotateBy* rotate = RotateBy::create(1.0, 45);
+		RepeatForever* repeat = RepeatForever::create(rotate);
         // m_detection->add(sprite);
         sprite->addComponent(CollisionComponent::create(2));
         m_node->addChild(sprite);
@@ -120,7 +120,7 @@ bool SampleLayer::init(int num, bool use, int scale) {
     auto began = CC_CALLBACK_2(SampleLayer::touchBegan, this);
     auto move = CC_CALLBACK_2(SampleLayer::touchMoved, this);
     auto end = CC_CALLBACK_2(SampleLayer::touchEnded, this);
-    auto listener = EventListenerTouchOneByOne::create();
+	EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = began;
     listener->onTouchMoved = move;
     listener->onTouchEnded = end;
@@ -131,7 +131,7 @@ bool SampleLayer::init(int num, bool use, int scale) {
 
     this->schedule(
         [this](float f) {
-            auto time = Director::getInstance()->getSecondsPerFrame();
+            float time = Director::getInstance()->getSecondsPerFrame();
             auto str =
                 StringUtils::format("衝突判定:%fs\n全体:%fs", m_max, time);
             m_label->setString(str);
@@ -141,8 +141,8 @@ bool SampleLayer::init(int num, bool use, int scale) {
 }
 
 bool SampleLayer::touchBegan(cocos2d::Touch *touch, cocos2d::Event *event) {
-    auto pos = m_node->convertToNodeSpace(touch->getLocation());
-    for (auto node : m_node->getChildren()) {
+    Vec2 pos = m_node->convertToNodeSpace(touch->getLocation());
+    for (Node* node : m_node->getChildren()) {
         if (CollisionUtils::containsPoint(node, pos, Size::ZERO)) {
             node->retain();
             setUserData(node);
@@ -154,8 +154,8 @@ bool SampleLayer::touchBegan(cocos2d::Touch *touch, cocos2d::Event *event) {
 }
 
 void SampleLayer::touchMoved(cocos2d::Touch *touch, cocos2d::Event *event) {
-    auto pos = m_node->convertToNodeSpace(touch->getLocation());
-    if (auto node = (Node *)(getUserData())) {
+    Vec2 pos = m_node->convertToNodeSpace(touch->getLocation());
+    if (Node* node = (Node *)(getUserData())) {
         if (node->getParent() == nullptr) {
             node->release();
             setUserData(nullptr);
@@ -168,7 +168,7 @@ void SampleLayer::touchMoved(cocos2d::Touch *touch, cocos2d::Event *event) {
 }
 
 void SampleLayer::touchEnded(cocos2d::Touch *touch, cocos2d::Event *event) {
-    if (auto node = (Node *)(getUserData())) {
+    if (Node* node = (Node *)(getUserData())) {
         node->release();
         setUserData(nullptr);
     }
@@ -191,11 +191,11 @@ void SampleLayer::update(float f) {
         m_detection->update();
     } else {
         auto nodes = m_node->getChildren();
-        auto size = nodes.size();
+        ssize_t size = nodes.size();
         for (int i = 0; i < size; i++) {
-            auto node1 = nodes.at(i);
+            Node* node1 = nodes.at(i);
             for (int j = i + 1; j < size; j++) {
-                auto node2 = nodes.at(j);
+                Node* node2 = nodes.at(j);
                 if (CollisionUtils::intersectRect(node1, node2)) {
                     node1->setColor(Color3B::RED);
                     node2->setColor(Color3B::RED);
@@ -220,8 +220,8 @@ void SampleLayer::update(float f) {
 
 void SampleLayer::detectCollision(CollisionNode *collisionObject1,
                                   CollisionNode *collisionObject2) {
-    auto node1 = collisionObject1->getNode();
-    auto node2 = collisionObject2->getNode();
+    Node* node1 = collisionObject1->getNode();
+    Node* node2 = collisionObject2->getNode();
     if (CollisionUtils::intersectRect(node1, node2) == false) {
         return;
     }
@@ -245,9 +245,9 @@ void SampleLayer::detectCollision(CollisionNode *collisionObject1,
 MenuItemSprite *SampleLayer::generateButton(
     const std::string &caption, const cocos2d::ccMenuCallback &callback) {
     auto generate = [this](const std::string &cap) {
-        auto spr = Sprite::create("sample/button.png");
-        auto size = spr->getContentSize();
-        auto text = Label::createWithSystemFont(cap, "Arial", 30);
+        Sprite* spr = Sprite::create("sample/button.png");
+        Size size = spr->getContentSize();
+        Label* text = Label::createWithSystemFont(cap, "Arial", 30);
         text->setPosition(Point(size.width / 2, size.height / 2));
         text->setColor(Color3B::BLACK);
         spr->addChild(text);

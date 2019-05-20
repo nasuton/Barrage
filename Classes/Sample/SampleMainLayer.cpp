@@ -6,8 +6,8 @@ USING_NS_CC;
 #pragma execution_character_set("utf-8")
 
 Scene *SampleMainLayer::createScene() {
-    auto scene = Scene::create();
-    auto layer = SampleMainLayer::create();
+    Scene* scene = Scene::create();
+    Layer* layer = SampleMainLayer::create();
     scene->addChild(layer);
     return scene;
 }
@@ -18,23 +18,23 @@ bool SampleMainLayer::init() {
     }
     // t->addCollisionTarget(f);
 
-    auto win = Director::getInstance()->getVisibleSize();
-    auto o = Director::getInstance()->getVisibleOrigin();
+    Size win = Director::getInstance()->getVisibleSize();
+    Vec2 o = Director::getInstance()->getVisibleOrigin();
     cocos2d::Vector<cocos2d::MenuItem *> list;
     // 数
-    auto num = Label::createWithSystemFont("Sprite", "Arial", 20);
+	Label* num = Label::createWithSystemFont("Sprite", "Arial", 20);
     num->setPosition(75, win.height - 50);
     num->setColor(Color3B::BLACK);
     addChild(num);
 
     // 4分木
-    auto shinkinum = Label::createWithSystemFont("4分木利用", "Arial", 20);
+    Label* shinkinum = Label::createWithSystemFont("4分木利用", "Arial", 20);
 	shinkinum->setPosition(200, win.height - 50);
 	shinkinum->setColor(Color3B::BLACK);
     addChild(shinkinum);
 
     // 画面サイズ
-    auto winnum = Label::createWithSystemFont("フィールド", "Arial", 20);
+    Label* winnum = Label::createWithSystemFont("フィールド", "Arial", 20);
 	winnum->setPosition(340, win.height - 50);
 	winnum->setColor(Color3B::BLACK);
     addChild(winnum);
@@ -44,7 +44,7 @@ bool SampleMainLayer::init() {
         auto callback = [this, i](Ref *ref) {
             m_num = i;
             CCLOG("num: %d", i);
-            for (auto m : m_nums) {
+            for (MenuItemSprite* m : m_nums) {
                 if (m != ref) {
                     m->setOpacity(140);
                 } else {
@@ -52,8 +52,8 @@ bool SampleMainLayer::init() {
                 }
             }
         };
-        auto str = StringUtils::format("%d個", i);
-        auto menu = generateButton(str, callback);
+        std::string str = StringUtils::format("%d個", i);
+        MenuItemSprite* menu = generateButton(str, callback);
         if (i == 100) {
             m_num = i;
             menu->setOpacity(255);
@@ -70,7 +70,7 @@ bool SampleMainLayer::init() {
         auto callback = [this, i](Ref *ref) {
             m_usefortree = i;
             CCLOG("useForTree: %s", i ? "true" : "false");
-            for (auto m : m_uses) {
+            for (MenuItemSprite* m : m_uses) {
                 if (m != ref) {
                     m->setOpacity(140);
                 } else {
@@ -78,8 +78,8 @@ bool SampleMainLayer::init() {
                 }
             }
         };
-        auto str = StringUtils::format("%s", i ? "する" : "しない");
-        auto menu = generateButton(str, callback);
+        std::string str = StringUtils::format("%s", i ? "する" : "しない");
+        MenuItemSprite* menu = generateButton(str, callback);
         if (i) {
             m_usefortree = i;
             menu->setOpacity(255);
@@ -96,7 +96,7 @@ bool SampleMainLayer::init() {
     for (int i : {1, 2, 3}) {
         auto callback = [this, i](Ref *ref) {
             m_winSize = i;
-            for (auto m : m_winsizes) {
+            for (MenuItemSprite* m : m_winsizes) {
                 if (m != ref) {
                     m->setOpacity(140);
                 } else {
@@ -104,7 +104,7 @@ bool SampleMainLayer::init() {
                 }
             }
         };
-        auto str = StringUtils::format("%d倍", i);
+        std::string str = StringUtils::format("%d倍", i);
         auto menu = generateButton(str, callback);
         if (i == 1) {
             m_winSize = i;
@@ -118,14 +118,14 @@ bool SampleMainLayer::init() {
         m_winsizes.pushBack(menu);
     }
     auto callback = [this](Ref *ref) {
-        auto scene = SampleLayer::createScene(m_num, m_usefortree, m_winSize);
+        Scene* scene = SampleLayer::createScene(m_num, m_usefortree, m_winSize);
         Director::getInstance()->replaceScene(scene);
     };
     auto go = generateButton("Go", callback);
     go->setPosition(win.width - 130, win.height - 50);
     list.pushBack(go);
 
-    auto menu = Menu::createWithArray(list);
+    Menu* menu = Menu::createWithArray(list);
     menu->setContentSize(win);
     menu->setAnchorPoint(Point::ZERO);
     menu->setPosition(Point::ZERO);
@@ -136,9 +136,9 @@ bool SampleMainLayer::init() {
 MenuItemSprite *SampleMainLayer::generateButton(
     const std::string &caption, const cocos2d::ccMenuCallback &callback) {
     auto generate = [this](const std::string &cap) {
-        auto spr = Sprite::create("sample/button.png");
-        auto size = spr->getContentSize();
-        auto text = Label::createWithSystemFont(cap, "Arial", 30);
+        Sprite* spr = Sprite::create("sample/button.png");
+        Size size = spr->getContentSize();
+        Label* text = Label::createWithSystemFont(cap, "Arial", 30);
         text->setPosition(Point(size.width / 2, size.height / 2));
         text->setColor(Color3B::BLACK);
         spr->addChild(text);

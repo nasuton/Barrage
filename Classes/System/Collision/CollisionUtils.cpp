@@ -48,14 +48,14 @@ bool CollisionUtils::intersectRect(cocos2d::Node* _target, cocos2d::Node* _self)
 	Size sSize(_self->getContentSize());
 	double tl = sqrt(pow(tSize.width, 2) + pow(tSize.height, 2));
 	double sl = sqrt(pow(sSize.width, 2) + pow(sSize.height, 2));
-	auto s = tl >= sl ? _self : _target;
-	auto b = tl >= sl ? _target : _self;
-	auto sCorner = getCorner(s);
-	auto bCorner = getCorner(b);
+	Node* s = tl >= sl ? _self : _target;
+	Node* b = tl >= sl ? _target : _self;
+	CollisionCorner sCorner = getCorner(s);
+	CollisionCorner bCorner = getCorner(b);
 
 	// 線分に入っているかどうかを見る
-	for (auto line : sCorner.lines()) {
-		for (auto line2 : bCorner.lines()) {
+	for (CollisionLine line : sCorner.lines()) {
+		for (CollisionLine line2 : bCorner.lines()) {
 			if (cross(&line, &line2)) {
 				return true;
 			}

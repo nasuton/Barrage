@@ -26,7 +26,7 @@ CollisionComponent* CollisionComponent::create() {
 }
 
 CollisionComponent* CollisionComponent::create(CollisionDetaction* _detaction, unsigned int _group) {
-	auto ref = new CollisionComponent();
+	CollisionComponent* ref = new CollisionComponent();
 	if (ref && ref->initWithDetaction(_detaction, _group)) {
 		ref->autorelease();
 		return ref;

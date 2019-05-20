@@ -28,8 +28,8 @@ bool MyShip::init(std::string _imageFileName) {
 		return false;
 	}
 
-	auto baseSprite = Sprite::create(_imageFileName);
-	auto textureSource = baseSprite->getTexture();
+	Sprite* baseSprite = Sprite::create(_imageFileName);
+	Texture2D* textureSource = baseSprite->getTexture();
 	textureSource->setAliasTexParameters();
 
 	//一コマの大きさを取得する
@@ -37,7 +37,7 @@ bool MyShip::init(std::string _imageFileName) {
 	float frameHeight = baseSprite->getContentSize().height;
 	this->setContentSize(Size(frameWidth, frameWidth));
 
-	auto animation = Animation::create();
+	Animation* animation = Animation::create();
 	animation->setDelayPerUnit(0.3f);
 	animation->setRestoreOriginalFrame(true);
 

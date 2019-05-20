@@ -27,7 +27,7 @@ CollisionDetaction::~CollisionDetaction() {
 }
 
 CollisionDetaction* CollisionDetaction::create() {
-	auto ref = new CollisionDetaction();
+	CollisionDetaction* ref = new CollisionDetaction();
 	ref->autorelease();
 	return ref;
 }
@@ -101,7 +101,7 @@ bool CollisionDetaction::init(Node* _field, int _level, bool _autoClean,
 	unitSize = Size((float)(winSize.width / (1 << _level)),
 		            (float)(winSize.height / (1 << _level)));
 	for (int i = 0; i < dwCellNum; i++) {
-		auto spaceCellArray = CollisionNodeList::create();
+		CollisionNodeList* spaceCellArray = CollisionNodeList::create();
 		spaceArray->addOject(spaceCellArray);
 	}
 
@@ -119,11 +119,11 @@ void CollisionDetaction::update() {
 		return;
 	}
 
-	for (auto _node : *gameObjectArray) {
+	for (CollisionNode* _node : *gameObjectArray) {
 		updateSpaceStatus(_node);
 	}
 
-	auto ary = CollisionNodeList::create();
+	CollisionNodeList* ary = CollisionNodeList::create();
 	scanCollisionDetection(0, ary);
 }
 
@@ -173,7 +173,7 @@ void CollisionDetaction::scanCollisionDetection(int _spaceIndex, CollisionNodeLi
 		return;
 	}
 
-	auto spaceCellArray = spaceArray->get(_spaceIndex);
+	CollisionNodeList* spaceCellArray = spaceArray->get(_spaceIndex);
 
 	checkHitSpaceCell(spaceCellArray, spaceCellArray);
 	checkHitSpaceCell(spaceCellArray, _stackArray);
@@ -185,7 +185,7 @@ void CollisionDetaction::scanCollisionDetection(int _spaceIndex, CollisionNodeLi
 		nextSpaceIndex = _spaceIndex * 4 + 1 + i;
 		if (nextSpaceIndex >= 0 && nextSpaceIndex < dwCellNum) {
 			if (!childFlag) {
-				for (auto obj : *spaceCellArray) {
+				for (CollisionNode* obj : *spaceCellArray) {
 					_stackArray->addObject(obj);
 				}
 				ObjNum += spaceCellArray->count();
@@ -221,8 +221,8 @@ void CollisionDetaction::checkHitSpaceCell(CollisionNodeList* _array1, Collision
 		}
 	}
 	else {
-		for (auto obj : *_array1) {
-			for (auto obj2 : *_array2) {
+		for (CollisionNode* obj : *_array1) {
+			for (CollisionNode* obj2 : *_array2) {
 				if (obj != obj2) {
 					checkHit(obj, obj2);
 				}
