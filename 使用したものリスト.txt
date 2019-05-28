@@ -1,3 +1,8 @@
 ﻿・画像は下記のウェブから借りています。
-<船>
+<ship/airship01.png>
+<ship/airship02.png>
 ぴぽや https://pipoya.net/
+
+<bullet/missile.png>
+<bullet/normal.png>
+イラストAC https://www.ac-illust.com/
