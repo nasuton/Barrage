@@ -34,6 +34,9 @@
     <Filter Include="src\GameMain">
       <UniqueIdentifier>{f2a96ca0-583b-4d8a-9164-39e7c67a620a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Bullet">
+      <UniqueIdentifier>{f24edb8a-930d-4f01-af15-2a3cfd40fa46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -74,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\GameMain\GameMainScene.cpp">
       <Filter>src\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Bullet\NormalBullet.cpp">
+      <Filter>src\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Bullet\PowerBullet.cpp">
+      <Filter>src\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +127,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GameMain\GameMainScene.h">
       <Filter>src\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Bullet\NormalBullet.h">
+      <Filter>src\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Bullet\PowerBullet.h">
+      <Filter>src\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
