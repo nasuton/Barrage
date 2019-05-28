@@ -1,6 +1,9 @@
 ﻿#include "MyShip.h"
+#include "Bullet/PowerBullet.h"
 
 USING_NS_CC;
+
+#define BULLETINTERVAL  0.2f
 
 MyShip::MyShip() {
 
@@ -28,6 +31,9 @@ bool MyShip::init(std::string _imageFileName) {
 		return false;
 	}
 
+	limitSize = Size::ZERO;
+	intervalTime = 0.0f;
+
 	Sprite* baseSprite = Sprite::create(_imageFileName);
 	Texture2D* textureSource = baseSprite->getTexture();
 	textureSource->setAliasTexParameters();
@@ -53,7 +59,36 @@ bool MyShip::init(std::string _imageFileName) {
 	return true;
 }
 
+void MyShip::Limit(Vec2 _pos) {
+	_pos.clamp(minLimitPos, maxLimitPos);
+	this->setPosition(_pos);
+}
+
 void MyShip::Move(Vec2 _vec) {
 	Vec2 newPos;
 	newPos = this->getPosition() + (_vec * -1);
+	Limit(newPos);
+}
+
+void MyShip::SetLimit(Size _limitSize) {
+	limitSize = _limitSize;
+	//移動できる最小値及び最大値を設定
+	minLimitPos = Vec2(0.0f + this->getContentSize().width * 0.8f, 0.0f + this->getContentSize().height);
+	maxLimitPos = Vec2(limitSize.width - (this->getContentSize().width * 0.8f), limitSize.height - this->getContentSize().height);
+}
+
+void MyShip::Shot(float _dt, Layer* _target) {
+	intervalTime += _dt;
+
+	if (BULLETINTERVAL <= intervalTime) {
+		intervalTime = 0.0f;
+
+		PowerBullet* bullet = PowerBullet::create("bullet/missile.png");
+		bullet->setPosition(this->getPosition().x, this->getPosition().y + 50.0f);
+		Vec2 endPos = Vec2(bullet->getPosition().x, bullet->getPosition().y + (limitSize.height * 0.3f));
+		MoveTo* move = MoveTo::create(0.5f, endPos);
+		RemoveSelf* remove = RemoveSelf::create();
+		bullet->runAction(Sequence::create(move, remove, NULL));
+		_target->addChild(bullet);
+	}
 }
