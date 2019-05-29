@@ -1,9 +1,11 @@
 ﻿#include "MyShip.h"
+#include "Bullet/NormalBullet.h"
 #include "Bullet/PowerBullet.h"
 
 USING_NS_CC;
 
-#define BULLETINTERVAL  0.2f
+#define NORMALBULLETINTERVAL 0.08f
+#define POWERBULLETINTERVAL  0.2f
 
 MyShip::MyShip() {
 
@@ -80,15 +82,23 @@ void MyShip::SetLimit(Size _limitSize) {
 void MyShip::Shot(float _dt, Layer* _target) {
 	intervalTime += _dt;
 
-	if (BULLETINTERVAL <= intervalTime) {
+	//ノーマル
+	if (NORMALBULLETINTERVAL <= intervalTime) {
+		intervalTime = 0.0f;
+
+		NormalBullet* bullet = NormalBullet::create("bullet/normal.png");
+		bullet->setPosition(this->getPosition().x, this->getPosition().y + 50.0f);
+		_target->addChild(bullet);
+	}
+
+	//パワー
+	/*
+	if (POWERBULLETINTERVAL <= intervalTime) {
 		intervalTime = 0.0f;
 
 		PowerBullet* bullet = PowerBullet::create("bullet/missile.png");
 		bullet->setPosition(this->getPosition().x, this->getPosition().y + 50.0f);
-		Vec2 endPos = Vec2(bullet->getPosition().x, bullet->getPosition().y + (limitSize.height * 0.3f));
-		MoveTo* move = MoveTo::create(0.5f, endPos);
-		RemoveSelf* remove = RemoveSelf::create();
-		bullet->runAction(Sequence::create(move, remove, NULL));
 		_target->addChild(bullet);
 	}
+	*/
 }

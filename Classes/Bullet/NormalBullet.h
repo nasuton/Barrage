@@ -8,13 +8,10 @@ public:
 	NormalBullet();
 	~NormalBullet();
 
-	CREATE_FUNC(NormalBullet);
+	static NormalBullet* create(std::string _imageFileName);
 
 private:
-	bool init();
-
-private:
-	cocos2d::Size winSize;
+	bool init(std::string _imageFileName);
 };
 
 

@@ -28,5 +28,11 @@ bool PowerBullet::init(std::string _imageFileName) {
 		return false;
 	}
 
+	Size winSize = Director::getInstance()->getWinSize();
+	Vec2 endPos = Vec2(0, winSize.height * 0.3f);
+	MoveBy* move = MoveBy::create(0.5f, endPos);
+	RemoveSelf* remove = RemoveSelf::create();
+	this->runAction(Sequence::create(move, remove, NULL));
+
 	return true;
 }
