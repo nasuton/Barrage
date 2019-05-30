@@ -31,6 +31,10 @@ bool GameMainLayer::init() {
 	player->SetLimit(winSize);
 	this->addChild(player);
 
+	Sprite* enemy = Sprite::create("enemy/enemy01.png");
+	enemy->setPosition(winSize.width * 0.5, winSize.height * 0.8f);
+	this->addChild(enemy);
+
 	this->scheduleUpdate();
 
 	return true;
