@@ -37,6 +37,12 @@
     <Filter Include="src\Bullet">
       <UniqueIdentifier>{f24edb8a-930d-4f01-af15-2a3cfd40fa46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\System\SoundManager">
+      <UniqueIdentifier>{6a9729e7-91c9-48a3-80fa-bae46110e190}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System\JsonHelper">
+      <UniqueIdentifier>{d6c2d546-5bb5-416b-b23d-0491cef3af73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -83,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Bullet\PowerBullet.cpp">
       <Filter>src\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameMain\GameMainFieldData.cpp">
+      <Filter>src\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\System\SoundManager\SoundManager.cpp">
+      <Filter>src\System\SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Bullet\PowerBullet.h">
       <Filter>src\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameMain\GameMainFieldData.h">
+      <Filter>src\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\SoundManager\SoundManager.h">
+      <Filter>src\System\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\System\JsonHelper\JsonHelper.h">
+      <Filter>src\System\JsonHelper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
